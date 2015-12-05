@@ -1,0 +1,19 @@
+{
+  "name": "victor-crawler",
+  "version": "1.0.0",
+  "description": "a crawler for crawling sites i want",
+  "main": "run.js",
+  "dependencies": {
+    "encoding": "^0.1.11",
+    "jugglingdb": "^1.0.2",
+    "phantom": "^0.8.4"
+  },
+  "devDependencies": {
+    "jugglingdb": "^1.0.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Victor Guo",
+  "license": "ISC"
+}
