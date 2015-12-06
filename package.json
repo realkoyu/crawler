@@ -5,9 +5,9 @@
   "main": "run.js",
   "repository": "https://realkoyu@github.com/realkoyu/crawler.git",
   "dependencies": {
-    "jugglingdb": "^1.0.2",
+    "mysql": "^2.9.0",
     "phantom": "^0.8.4",
-    "jugglingdb-mysql": "latest",
+    "sequelize": "^3.14.2",
     "uuid": "^2.0.1"
   },
   "scripts": {
