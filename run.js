@@ -42,16 +42,19 @@ function saveRecord(url, content, cb) {
     });
 }
 
-function processPage() {
+function processPage(page) {
     if (urlQueue.length > 0 && processing == false) {
         processing = true;
         var lastUrl = urlQueue.pop();
+        if (lastUrl == 'http://en.jd.com/') {
+            processing = false;
+            return;
+        }
         console.log('Url: ' + lastUrl);
-        getPhantomInstance(function(page) {
-            if (contentRegex.test(lastUrl)) {
-                console.log('Content');
-                page.open(lastUrl, function(status) {
-                    console.log(status);
+        if (contentRegex.test(lastUrl)) {
+            console.log('Content');
+            page.open(lastUrl, function(status) {
+                if (status == 'success') {
                     page.evaluate(
                         function() {
                             return {
@@ -75,12 +78,16 @@ function processPage() {
                             processing = false;
                         }
                     );
-                });
-            }
-            else {
-                console.log('Page');
-                page.open(lastUrl, function(status) {
-                    console.log(status);
+                }
+                else {
+                    urlQueue.splice(0, 0, lastUrl);
+                }
+            });
+        }
+        else {
+            console.log('Page');
+            page.open(lastUrl, function(status) {
+                if (status == 'success') {
                     page.evaluate(
                         function() {
                             return $('a').map(function(index, item) { return item.href; }).get();
@@ -94,9 +101,12 @@ function processPage() {
                             processing = false;
                         }
                     );
-                });
-            }
-        });
+                }
+                else {
+                    urlQueue.splice(0, 0, lastUrl);
+                }
+            });
+        }
     }
 }
 
@@ -110,6 +120,12 @@ function getPhantomInstance(cb) {
 
 urlQueue.push('http://www.jd.com');
 
-setInterval(function(){
-    processPage();
-}, 1000);
+function startTheBusiness() {
+    getPhantomInstance(function(page){
+        setInterval(function(){
+            processPage(page);
+        }, 1000);
+    });
+}
+
+startTheBusiness();
